@@ -1,4 +1,4 @@
-const words_to_find = [
+const word_to_find = [
     'ANGULAR',
     'ARDUINO',
     'BOOTSTRAP',
@@ -28,18 +28,19 @@ class hangedMan {
     }
 
 init() {
-    this.random_word = this.getRandomWorld(words_to_find);
+    this.random_word = this.getRandomWorld(word_to_find);
     console.log(this.random_word);
     
 
     const word_element = document.createElement('section');
-    word_element.id = 'words_to_find';
+    word_element.id = 'word_to_find';
 
     word_element.innerHTML = 
     `
         <figure>
-        <figcaption>Nombre de lettres à trouver : ${this.random_word.length}<hr>Lettres trouvées: ${this.letters_found}
-        <hr>Tentatives: ${this.attempts}<hr>Erreurs : ${this.errors} / 5</figcaption>
+            <img src = "./images/gallows.gif" alt = "support pendaison">
+            <figcaption>Nombre de lettres à trouver : ${this.random_word.length}<hr>Lettres trouvées: ${this.letters_found}
+            <hr>Tentatives: ${this.attempts}<hr>Erreurs : ${this.errors} / 5</figcaption>
         </figure>
     `;
 
@@ -54,6 +55,8 @@ init() {
 
     this.hidden_letters = this.displayHiddenWord(this.random_word);
     console.log(this.hidden_letters);
+
+
 }
 
 getRandomWorld(array) {
@@ -73,10 +76,10 @@ generateletterButtons(letters_element) {
         const li_element = document.createElement('li');
         li_element.textContent = letter;
 
-        li_element.addEventListener('click', () => function checkIfLetterIsInTheWord(event)
+        li_element.addEventListener('click', () => this.checkIfLetterIsInTheWord(event),
         {
-            once = true;
-        })
+            once: true
+        });
 
         ul_element.appendChild(li_element);
     });
@@ -90,7 +93,7 @@ displayHiddenWord() {
 
     paragraph_element.textContent = hidden_word;
 
-    document.body.querySelector('section[id="words_to_find"]').appendChild(paragraph_element);
+    document.body.querySelector('section[id="word_to_find"]').appendChild(paragraph_element);
 
     return hidden_word.split('');
 }
@@ -100,27 +103,53 @@ checkIfLetterIsInTheWord(event) {
     const selected_letter = event.target.textContent;
 
     if (this.random_word.includes(selected_letter)) {
+
         event.target.classList.add('good');
 
-        this.random_word.split('').foreach((letter, index) => {
+        this.random_word.split('').forEach((letter, index) => {
             if (letter === selected_letter){
                 this.letters_found++;
-                this.hidden_letters_array[index] = selected_letter;
+                this.hidden_letters[index] = selected_letter;
             }
         });
 
-        document.body.querySelector('section[id="word_to_find" > p').textContent = this.hidden_letters.join('');
+        document.body.querySelector('section[id="word_to_find"] > p').textContent = this.hidden_letters.join('');
+        console.log(this.hidden_letters);
     }
 
     else {
+        this.errors++;
+        event.target.classList.add('wrong');
+        document.body.querySelector('img').src = `./images/error${this.errors}.png`
 
     }
+    document.body.querySelector('figcaption').innerHTML = `Nombre de lettres à trouver : ${this.random_word.length}
+    <hr>Lettres trouvées : ${this.letters_found}<hr>Tentatives : ${this.attempts}<hr>Erreurs : ${this.errors} /5`
+
+    this.checkIfWinOrLoose();
+}
+
+checkIfWinOrLoose(){
+    const word_paragraph = document.body.querySelector('section[id="word_to_find"] > p');
+
+    if (this.errors === 5) {
+        this.gameOver(word_paragraph);
+        word_paragraph.classList.add('loser');
+        word_paragraph.textContent = this.random_word;
+    }
+    if (this.letters_found === this.random_word.length) {
+        this.gameOver(word_paragraph);
+        word_paragraph.classList.add('winner');
+    }
+}
+gameOver(word_paragraph) {
+
 }
 
 }
 
 new hangedMan ({
     element: document.body.querySelector('main'),
-    list_of_words: words_to_find
+    list_of_words: word_to_find
 })
 
