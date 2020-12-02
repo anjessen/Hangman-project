@@ -38,7 +38,7 @@ init() {
     word_element.innerHTML = 
     `
         <figure>
-            <img src = "./images/gallows.gif" alt = "support pendaison">
+            <img src = "./images/error1.png" alt = "support pendaison">
             <figcaption>Nombre de lettres à trouver : ${this.random_word.length}<hr>Lettres trouvées: ${this.letters_found}
             <hr>Tentatives: ${this.attempts}<hr>Erreurs : ${this.errors} / 5</figcaption>
         </figure>
@@ -95,7 +95,7 @@ displayHiddenWord() {
 
     document.body.querySelector('section[id="word_to_find"]').appendChild(paragraph_element);
 
-    return hidden_word.split('');
+    return hidden_word.split(' ');
 }
 
 checkIfLetterIsInTheWord(event) {
@@ -106,7 +106,7 @@ checkIfLetterIsInTheWord(event) {
 
         event.target.classList.add('good');
 
-        this.random_word.split('').forEach((letter, index) => {
+        this.random_word.split(' ').forEach((letter, index) => {
             if (letter === selected_letter){
                 this.letters_found++;
                 this.hidden_letters[index] = selected_letter;
