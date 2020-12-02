@@ -95,7 +95,7 @@ displayHiddenWord() {
 
     document.body.querySelector('section[id="word_to_find"]').appendChild(paragraph_element);
 
-    return hidden_word.split(' ');
+    return hidden_word.split('');
 }
 
 checkIfLetterIsInTheWord(event) {
@@ -106,7 +106,7 @@ checkIfLetterIsInTheWord(event) {
 
         event.target.classList.add('good');
 
-        this.random_word.split(' ').forEach((letter, index) => {
+        this.random_word.split('').forEach((letter, index) => {
             if (letter === selected_letter){
                 this.letters_found++;
                 this.hidden_letters[index] = selected_letter;
